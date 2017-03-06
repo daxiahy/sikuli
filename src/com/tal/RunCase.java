@@ -25,11 +25,14 @@ public class RunCase {
 	/**
 	 * 运行程序的主要方法
 	 * 
+	 * 
 	 * @param path
 	 *            是Excel的路径
 	 * @throws Exception
 	 */
 	public static void runCase(String path) throws Exception {
+		
+		Process p = null;
 		Screen s = new Screen();
 		// 读取表格中的总行数
 		int com_row = ReadExcel.readRowNum(path);
@@ -40,7 +43,8 @@ public class RunCase {
 		if (com_row >= 3) {
 			try {
 				/** 执行应用程序 */
-				Process p = Runtime.getRuntime().exec(filepath_exe);
+				if(!filepath_exe.equals("")) 
+					p = Runtime.getRuntime().exec(filepath_exe);
 				/**
 				 * 判断指令是否大于3行 第一行：应用程序的地址 第二行：图片的路径 第三行(及以上)：命令+图片名+参数
 				 */
@@ -134,13 +138,16 @@ public class RunCase {
 								s.wait(time);
 							}
 							waitEl(img_path, picture, p, i, path);
+							//查找全部并单击
 						} else if (result.get(0).equals("findAll")) {
 							String picture = AnalyzeCase.analyCom(path, result);
 							waitEl(img_path, picture, p, i, path);
 							for (Iterator<Match> ff = s.findAll(picture); ff.hasNext();) {
 								s.click(picture);
 							}
-
+						//重启程序
+						}else if(result.get(0).equals("reboot")){
+							Runtime.getRuntime().exec(filepath_exe);
 						}
 
 					}

@@ -123,4 +123,5 @@ public class AnalyzeCase {
 		String message = (String)list.get(1);
 		return message;
 	}
+	
 }
